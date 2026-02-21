@@ -1,174 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio // Ember2819</title>
 
-<style>
-* {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: system-ui, -apple-system, sans-serif;
-        scroll-behavior: smooth;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+            scroll-behavior: smooth;
+        }
 
-    body {
-        background: radial-gradient(circle at top left, #1a1a2e, #0f0f0f, #16213e);
-        background-attachment: fixed;
-        color: white;
-        line-height: 1.6;
-        min-height: 100vh;
-    }
+        body {
+            background: radial-gradient(circle at top left, #1a1a2e, #0f0f0f, #16213e);
+            background-attachment: fixed;
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-    nav {
-        position: fixed;
-        width: 90%;
-        max-width: 400px;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 50px;
-        padding: 0.8rem 2rem;
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        z-index: 1000;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
+        nav {
+            position: fixed;
+            width: 90%;
+            max-width: 400px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            z-index: 1000;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
 
-    nav a {
-        color: rgba(255, 255, 255, 0.7);
-        text-decoration: none;
-        font-weight: 500;
-        transition: 0.3s;
-    }
+        nav a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
 
-    nav a:hover {
-        color: #00bfff;
-    }
+        nav a:hover {
+            color: #00bfff;
+        }
 
-    header {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 2rem;
-    }
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
 
-    header h1 {
-        font-size: clamp(2.5rem, 8vw, 4rem);
-        background: linear-gradient(45deg, #00bfff, #00ffcc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 0.5rem;
-    }
+        header h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            background: linear-gradient(45deg, #00bfff, #00ffcc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
 
-    section {
-        padding: 6rem 2rem;
-        max-width: 900px;
-        margin: auto;
-    }
+        section {
+            padding: 6rem 2rem;
+            max-width: 900px;
+            margin: auto;
+        }
 
-    h2 {
-        margin-bottom: 2rem;
-        border-left: 4px solid #00bfff;
-        padding-left: 15px;
-    }
+        h2 {
+            margin-bottom: 2rem;
+            border-left: 4px solid #00bfff;
+            padding-left: 15px;
+        }
 
-    .projects {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-    }
+        .project-link-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-decoration: none;
+            color: white;
+            display: block;
+            transition: all 0.4s ease;
+            text-align: center;
+        }
 
-    .card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 2rem;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        opacity: 0;
-        transform: translateY(30px);
-    }
+        .project-link-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #00bfff;
+        }
 
-    .card:hover {
-        transform: translateY(-10px);
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(0, 191, 255, 0.4);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .show {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(5px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: 0.3s;
-        z-index: 2000;
-    }
-
-    .modal-content {
-        background: rgba(30, 30, 30, 0.8);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 2.5rem;
-        border-radius: 24px;
-        max-width: 500px;
-        width: 90%;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    .modal.active {
-        opacity: 1;
-        pointer-events: all;
-    }
-
-    .close {
-        float: right;
-        cursor: pointer;
-        font-size: 1.5rem;
-        color: #00bfff;
-        transition: 0.2s;
-    }
-
-    .close:hover {
-        transform: rotate(90deg);
-    }
-
-    footer {
-        text-align: center;
-        padding: 4rem 2rem;
-        opacity: 0.4;
-        font-size: 0.9rem;
-    }
-</style>
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            opacity: 0.4;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
 
 <nav>
     <a href="#about">About</a>
-    <a href="#projects">Projects</a>
+    <a href="projects.html">Projects</a>
 </nav>
 
 <header>
@@ -183,75 +130,17 @@
     </p>
 </section>
 
-<section id="projects">
-    <h2>Projects</h2>
-    <div class="projects" id="projectContainer"></div>
+<section id="projects-teaser">
+    <h2>My Projects</h2>
+    <a href="projects.html" class="project-link-card">
+        <h3>View Projects →</h3>
+        <p>Explore my projects and scripts.</p>
+    </a>
 </section>
 
 <footer>
     Ember2819
 </footer>
-
-<div class="modal" id="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">X</span>
-        <h3 id="modalTitle"></h3>
-        <p id="modalDesc"></p>
-    </div>
-</div>
-
-<script>
-    const projects = [
-        {
-            title: "Custom Web Scraper",
-            desc: "A web scraper built with python that takes keywords and searches or searches from a pre-definded list in certain categories."
-        },
-        {
-            title: "Spreadsheet to Website Program.",
-            desc: "Program that pulls and pushes data back and forth between a spreadsheet."
-        },
-        {
-            title: "LAN Device Discorvery Program",
-            desc: "Local network scanner that scans for devices on a local network and can launch Nmap on them."
-        }
-    ];
-
-    const container = document.getElementById("projectContainer");
-
-    projects.forEach(project => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        card.innerHTML = `<h3>${project.title}</h3><p>Click to view details</p>`;
-        card.onclick = () => openModal(project.title, project.desc);
-        container.appendChild(card);
-    });
-
-    function openModal(title, desc) {
-        document.getElementById("modalTitle").innerText = title;
-        document.getElementById("modalDesc").innerText = desc;
-        document.getElementById("modal").classList.add("active");
-    }
-
-    function closeModal() {
-        document.getElementById("modal").classList.remove("active");
-    }
-
-    window.addEventListener("click", e => {
-        if (e.target.id === "modal") closeModal();
-    });
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("show");
-            }
-        });
-    });
-
-    document.querySelectorAll(".card").forEach(card => {
-        observer.observe(card);
-    });
-</script>
 
 </body>
 </html>
