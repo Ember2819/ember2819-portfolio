@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Stack // Ember2819</title>
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --python: #3776ab;
+            --html: #e34f26;
+            --js: #f7df1e;
+            --linux: #fcc624;
+            --css: #1572b6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0f0f0f 70%, #000000 100%);
+            background-attachment: fixed;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        nav {
+            max-width: 900px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .back-btn {
+            color: #00bfff;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        header {
+            max-width: 900px;
+            margin: 0 auto 4rem auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tech-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-color);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 10px 30px -10px var(--accent-color);
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        h3 {
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.4;
+        }
+
+        .python { --accent-color: var(--python); }
+        .html { --accent-color: var(--html); }
+        .js { --accent-color: var(--js); }
+        .linux { --accent-color: var(--linux); }
+        .css { --accent-color: var(--css); }
+
+        @media (max-width: 600px) {
+            .stack-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="back-btn">← Return to Home</a>
+    </nav>
+
+    <header>
+        <h1>Tech Stack</h1>
+        <p>The most important languages and technologies I use every day.</p>
+    </header>
+
+    <main class="stack-grid">
+        <div class="tech-card python">
+            <span class="tech-icon">🐍</span>
+            <h3>Python</h3>
+            <p>Primary language for scripting, cybersecurity, and automation tools.</p>
+        </div>
+
+        <div class="tech-card linux">
+            <span class="tech-icon">🐧</span>
+            <h3>Linux</h3>
+            <p>Experienced with Linux commands, interface, and how to install and operate many different distros.</p>
+        </div>
+
+        <div class="tech-card js">
+            <span class="tech-icon">🟨</span>
+            <h3>JavaScript</h3>
+            <p>Used for scripting and interacting with websites.</p>
+        </div>
+
+        <div class="tech-card html">
+            <span class="tech-icon">💀</span>
+            <h3>HTML5</h3>
+            <p>Building clean, modern websites. </p>
+        </div>
+
+        <div class="tech-card css">
+            <span class="tech-icon">🔷</span>
+            <h3>CSS3</h3>
+            <p>Designing websites and styling.</p>
+        </div>
+    </main>
+
+</body>
+</html>
