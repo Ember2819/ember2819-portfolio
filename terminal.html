@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal // Ember2819</title>
+    <style>
+        :root {
+            --term-bg: rgba(10, 10, 15, 0.95);
+            --term-border: rgba(0, 191, 255, 0.3);
+            --prompt: #00ffcc;
+            --text: #00bfff;
+        }
+
+        body {
+            background: #050505;
+            color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .terminal-container {
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            background: var(--term-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--term-border);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--term-border);
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        #output {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .input-line {
+            display: flex;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            align-items: center;
+        }
+
+        .prompt { color: var(--prompt); margin-right: 10px; font-weight: bold; }
+
+        input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            flex: 1;
+        }
+
+        .cmd-history { color: #fff; margin-bottom: 5px; }
+        .res-text { color: rgba(255, 255, 255, 0.7); margin-bottom: 15px; }
+        .system { color: var(--prompt); }
+    </style>
+</head>
+<body>
+
+<div class="terminal-container">
+    <div class="terminal-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <span style="margin-left: 10px; font-size: 12px; opacity: 0.5;">bash — 80x24</span>
+    </div>
+    <div id="output">Welcome to EmberOS v1.0
+Type 'help' to see available commands.
+</div>
+    <div class="input-line">
+        <span class="prompt">guest@ember2819:~$</span>
+        <input type="text" id="commandInput" autofocus autocomplete="off">
+    </div>
+</div>
+
+<script>
+    const output = document.getElementById('output');
+    const input = document.getElementById('commandInput');
+
+    // List of commands
+    const commands = {
+        help: "Available commands: ls, whoami, clear, contact, exit",
+        contact: "Email: elroylilly@gmail.com\nGitHub: github.com/ember2819",
+        exit: "Redirecting to home...",
+    };
+
+    input.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter') {
+            const val = input.value.toLowerCase().trim();
+            addLine(`guest@ember2819:~$ ${val}`, 'cmd-history');
+            
+            if (val === 'ls') {
+                await listProjects();
+            } else if (val === 'whoami') {
+                typeWriter("I'm a 13 year old who loves to write scripts and learn about Cybersecurity.");
+            } else if (val === 'clear') {
+                output.innerHTML = '';
+            } else if (val === 'help') {
+                addLine(commands.help, 'res-text');
+            } else if (val === 'contact') {
+                addLine(commands.contact, 'res-text');
+            } else if (val === 'exit') {
+                addLine(commands.exit, 'system');
+                setTimeout(() => window.location.href = 'index.html', 1000);
+            } else if (val !== '') {
+                addLine(`Command not found: ${val}. Type 'help' for options.`, 'res-text');
+            }
+
+            input.value = '';
+            output.scrollTop = output.scrollHeight;
+        }
+    });
+
+    function addLine(text, className) {
+        const div = document.createElement('div');
+        div.className = className;
+        div.innerText = text;
+        output.appendChild(div);
+    }
+
+    async function listProjects() {
+        addLine("Accessing lab files...", "system");
+        try {
+            const response = await fetch('projects.html');
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            const projectTitles = Array.from(doc.querySelectorAll('h3')).map(h3 => h3.innerText);
+            
+            if (projectTitles.length > 0) {
+                addLine("DIRECTORY: /home/ember2819/projects", "res-text");
+                projectTitles.forEach(title => {
+                    addLine(` > ${title}`, "res-text");
+                });
+            } else {
+                addLine("Error: No projects found in projects.html", "res-text");
+            }
+        } catch (err) {
+            addLine("Critical Error: Could not connect to project database.", "res-text");
+        }
+    }
+
+    function typeWriter(text) {
+        const div = document.createElement('div');
+        div.className = 'res-text';
+        output.appendChild(div);
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                div.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(type, 30);
+                output.scrollTop = output.scrollHeight;
+            }
+        }
+        type();
+    }
+</script>
+
+</body>
+</html>
