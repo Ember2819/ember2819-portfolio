@@ -105,34 +105,71 @@ Type 'help' to see available commands.
 <script>
     const output = document.getElementById('output');
     const input = document.getElementById('commandInput');
+    let isInstalled = false;
+    let awaitingPassword = false;
 
-    // List of commands
-    const commands = {
-        help: "Available commands: ls, whoami, clear, contact, exit",
-        contact: "Email: elroylilly@gmail.com\nGitHub: github.com/ember2819",
-        exit: "Redirecting to home...",
-    };
+    const commandList = "Available commands: ls, whoami, clear, contact, exit. To install a program, 'apt install program'";
 
     input.addEventListener('keydown', async (e) => {
         if (e.key === 'Enter') {
-            const val = input.value.toLowerCase().trim();
+            const val = input.value.trim();
+            const cmd = val.toLowerCase();
+
+            if (awaitingPassword) {
+                if (val === "sudo123!") {
+                    awaitingPassword = false;
+                    input.type = "text"; // Return to visible text
+                    addLine("Password accepted.", "system");
+                    installSequence();
+                } else {
+                    addLine("Incorrect password. Access denied.", "res-text");
+                    awaitingPassword = false;
+                    input.type = "text";
+                }
+                input.value = '';
+                return;
+            }
+
             addLine(`guest@ember2819:~$ ${val}`, 'cmd-history');
-            
-            if (val === 'ls') {
+
+            if (cmd === 'ls') {
                 await listProjects();
-            } else if (val === 'whoami') {
+                if (isInstalled) addLine("./program", "system"); // Show file if installed
+            } 
+            else if (cmd === 'whoami') {
                 typeWriter("I'm a 13 year old who loves to write scripts and learn about Cybersecurity.");
-            } else if (val === 'clear') {
+            } 
+            else if (cmd === 'help') {
+                addLine(commandList, 'res-text');
+            }
+            else if (cmd === 'clear') {
                 output.innerHTML = '';
-            } else if (val === 'help') {
-                addLine(commands.help, 'res-text');
-            } else if (val === 'contact') {
-                addLine(commands.contact, 'res-text');
-            } else if (val === 'exit') {
-                addLine(commands.exit, 'system');
+            }
+            else if (cmd === 'contact') {
+                addLine("Email: elroylilly@gmail.com\nGitHub: github.com/ember2819", "res-text");
+            }
+            else if (cmd === 'apt install program') {
+                addLine("E: Could not open lock file - open (13: Permission denied)", "res-text");
+                addLine("Are you root? Try using 'sudo'.", "res-text");
+            }
+            else if (cmd === 'sudo apt install program') {
+                addLine("[sudo] password for guest:", "system");
+                awaitingPassword = true;
+                input.type = "password"; // Mask the password
+            }
+            else if (cmd === './program') {
+                if (isInstalled) {
+                    runProgram();
+                } else {
+                    addLine("bash: ./program: No such file or directory", "res-text");
+                }
+            }
+            else if (cmd === 'exit') {
+                addLine("Terminating session...", "system");
                 setTimeout(() => window.location.href = 'index.html', 1000);
-            } else if (val !== '') {
-                addLine(`Command not found: ${val}. Type 'help' for options.`, 'res-text');
+            }
+            else if (cmd !== '') {
+                addLine(`Command not found: ${cmd}. Type 'help' for options.`, 'res-text');
             }
 
             input.value = '';
@@ -154,20 +191,51 @@ Type 'help' to see available commands.
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-
             const projectTitles = Array.from(doc.querySelectorAll('h3')).map(h3 => h3.innerText);
             
             if (projectTitles.length > 0) {
                 addLine("DIRECTORY: /home/ember2819/projects", "res-text");
-                projectTitles.forEach(title => {
-                    addLine(` > ${title}`, "res-text");
-                });
+                projectTitles.forEach(title => addLine(` > ${title}`, "res-text"));
             } else {
-                addLine("Error: No projects found in projects.html", "res-text");
+                addLine("No project files found.", "res-text");
             }
         } catch (err) {
-            addLine("Critical Error: Could not connect to project database.", "res-text");
+            addLine("Error: Unable to reach project database.", "res-text");
         }
+    }
+
+    // Helper: Simulated Installation Progress
+    function installSequence() {
+        addLine("Reading package lists...", "res-text");
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            const bar = `[${'#'.repeat(progress / 10)}${'-'.repeat(10 - progress / 10)}]`;
+            const lines = output.querySelectorAll('.system');
+            const lastLine = lines[lines.length - 1];
+            
+            if (lastLine.innerText.includes("Installing")) {
+                lastLine.innerText = `Installing program: ${bar} ${progress}%`;
+            } else {
+                addLine(`Installing program: ${bar} ${progress}%`, "system");
+            }
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                isInstalled = true;
+                addLine("Installation Complete. Binaries located in current directory.", "system");
+            }
+            output.scrollTop = output.scrollHeight;
+        }, 200);
+    }
+
+    function runProgram() {
+        addLine("--- EXECUTING DIAGNOSTICS ---", "system");
+        addLine("OS_PLATFORM: " + navigator.platform, "res-text");
+        addLine("BROWSER_CORE: " + navigator.appName, "res-text");
+        addLine("WINDOW_DIM: " + window.innerWidth + "x" + window.innerHeight, "res-text");
+        addLine("USER_AGENT: " + navigator.userAgent, "res-text");
+        addLine("----------------------------", "system");
     }
 
     function typeWriter(text) {
