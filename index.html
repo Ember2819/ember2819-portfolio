@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olen | Portfolio</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, sans-serif;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+        color: white;
+        line-height: 1.6;
+    }
+
+    nav {
+        position: fixed;
+        width: 100%;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(10px);
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        z-index: 1000;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    nav a:hover {
+        color: #00bfff;
+    }
+
+    header {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    header h1 {
+        font-size: 3.5rem;
+        background: linear-gradient(45deg, #00bfff, #00ffcc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    section {
+        padding: 6rem 2rem;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    h2 {
+        margin-bottom: 2rem;
+        border-left: 4px solid #00bfff;
+        padding-left: 10px;
+    }
+
+    .projects {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .card {
+        background: rgba(255,255,255,0.05);
+        padding: 1.5rem;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+        backdrop-filter: blur(10px);
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    .card:hover {
+        transform: translateY(-5px) scale(1.02);
+        background: rgba(255,255,255,0.1);
+    }
+
+    .show {
+        transform: translateY(0);
+        opacity: 1;
+        transition: all 0.6s ease;
+    }
+
+    footer {
+        text-align: center;
+        padding: 2rem;
+        opacity: 0.6;
+    }
+
+    /* Modal */
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.3s;
+    }
+
+    .modal-content {
+        background: #1a1a1a;
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+    }
+
+    .modal.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .close {
+        float: right;
+        cursor: pointer;
+        font-weight: bold;
+        color: #00bfff;
+    }
+
+    @media(max-width:600px){
+        header h1 { font-size: 2.5rem; }
+    }
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+</nav>
+
+<header>
+    <h1>Olen</h1>
+    <p>Developer • Cybersecurity • Builder</p>
+</header>
+
+<section id="about">
+    <h2>About Me</h2>
+    <p>
+        I'm a student developer passionate about software engineering,
+        cybersecurity, and building powerful tools from scratch.
+        I enjoy solving complex problems and creating modern web experiences.
+    </p>
+</section>
+
+<section id="projects">
+    <h2>Projects</h2>
+    <div class="projects" id="projectContainer"></div>
+</section>
+
+<footer>
+    © 2026 Olen
+</footer>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">X</span>
+        <h3 id="modalTitle"></h3>
+        <p id="modalDesc"></p>
+    </div>
+</div>
+
+<script>
+    const projects = [
+        {
+            title: "Cybersecurity Toolkit",
+            desc: "A custom-built penetration testing toolkit with a clean interface and modular design."
+        },
+        {
+            title: "Live Spreadsheet Website",
+            desc: "Dynamic website pulling live spreadsheet data and converting rows into animated cards."
+        },
+        {
+            title: "LAN Chat App",
+            desc: "Local network chat system for school computers using sockets and simple UI."
+        }
+    ];
+
+    const container = document.getElementById("projectContainer");
+
+    projects.forEach(project => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `<h3>${project.title}</h3><p>Click to view details</p>`;
+        card.onclick = () => openModal(project.title, project.desc);
+        container.appendChild(card);
+    });
+
+    function openModal(title, desc) {
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalDesc").innerText = desc;
+        document.getElementById("modal").classList.add("active");
+    }
+
+    function closeModal() {
+        document.getElementById("modal").classList.remove("active");
+    }
+
+    window.addEventListener("click", e => {
+        if (e.target.id === "modal") closeModal();
+    });
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("show");
+            }
+        });
+    });
+
+    document.querySelectorAll(".card").forEach(card => {
+        observer.observe(card);
+    });
+</script>
+
+</body>
+</html>
